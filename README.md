@@ -76,6 +76,12 @@ Abre **http://localhost:5173**. Para jugar con otras personas de tu misma red, q
 
 El juego es **un único proceso Node** que sirve la web compilada, el WebSocket del multijugador (`/ws`) y la voz (`/api/tts`). Necesitas un hosting que mantenga un proceso Node encendido y admita WebSockets. Plataformas solo estáticas (Vercel o Netlify en modo estático, GitHub Pages) **no sirven**.
 
+### Opción rápida · Render gratis con un clic
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/amlndz/english-party)
+
+Usa el [`render.yaml`](render.yaml) del repo: plan gratuito y **voz neuronal desactivada** (`TTS=off`), porque los 512 MB no dan para el modelo; se usa la voz del navegador. El servicio gratuito se duerme tras 15 min sin visitas y tarda ~1 min en despertar.
+
 ### Opción 1 · Cualquier servidor con Node (VPS, Render, Railway…)
 
 ```bash
@@ -98,7 +104,7 @@ El volumen guarda los audios ya generados para no regenerarlos en cada despliegu
 
 ### Requisitos de máquina
 
-- ~1 GB de RAM (el modelo de voz se carga en memoria).
+- Con voz neuronal: ~1 GB de RAM (el modelo se carga en memoria). Sin ella (`TTS=off`): ~100 MB.
 - La primera vez necesita salida a internet para descargar el modelo de voz.
 
 ---

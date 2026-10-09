@@ -1,0 +1,15 @@
+# Despliegue en Render con un clic (plan gratuito)
+services:
+  - type: web
+    name: english-party
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # El plan gratuito tiene 512 MB: sin voz neuronal (se usa la del navegador)
+      - key: TTS
+        value: "off"

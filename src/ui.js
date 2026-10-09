@@ -2,7 +2,7 @@
 import { ZONES, ZONE_BY_ID } from './content.js';
 import { store, storage } from './store.js';
 import { net } from './net.js';
-import { speak, sfx, prefetch, stopSpeaking, VOICES, getVoice, setVoice } from './audio.js';
+import { speak, sfx, prefetch, stopSpeaking, VOICES, getVoice, setVoice, neuralVoice } from './audio.js';
 import { renderQuestion, pickQuestions } from './quiz.js';
 import { mysteryBoxes, cupGame } from './minigames.js';
 import { progress, ROADMAP, PASS, EXAM_Q } from './progress.js';
@@ -173,6 +173,7 @@ export function initUI({ onPreview, onStart, onEmote, onGo }) {
         <button class="mc mc-compete" type="button"><span class="mc-n">4</span>${badge(pr.competeBest ? `Récord ${pr.competeBest}` : '')}<span class="mc-e">🏆</span><b>Competir</b><small>Contra la gente del aula y el ranking. ¡Con cajas y trile!</small></button>
       </div>
       <div class="mastery">${starsHtml(progress.stars(z.id))}<span>${progress.mastered(z.id) ? '🎓 ¡Aula dominada!' : 'Para dominar el aula: ver la teoría y aprobar el examen'}</span></div>`;
+    neuralVoice.then((on) => { const r = body.querySelector('.voice-row'); if (r && !on) r.hidden = true; });
     body.querySelectorAll('.vchip').forEach((c) => { c.onclick = () => {
       setVoice(c.dataset.v); body.querySelectorAll('.vchip').forEach((x) => x.classList.toggle('on', x === c));
       speak('Hello! Let\'s learn English together.');

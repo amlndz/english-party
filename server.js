@@ -19,6 +19,8 @@ const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css
 // ---------- estáticos (modo producción: npm run build && npm start) ----------
 // ---------- voz neuronal (Kokoro) ----------
 const VOICES = ['bf_emma', 'bm_george', 'af_heart', 'am_michael'];
+// TTS=off desactiva la voz neuronal (p. ej. en hostings con poca RAM): el cliente usa la voz del navegador
+const TTS_ON = !/^(off|0|false|no)$/i.test(process.env.TTS || '');
 const TTS_DIR = path.resolve('.tts-cache');
 fs.mkdirSync(TTS_DIR, { recursive: true });
 let ttsModel = null;
@@ -74,10 +76,16 @@ function warmup() {
   Promise.all([...texts].map((t) => synth(t, VOICES[0], 'low').catch(() => null)))
     .then(() => console.log(`🔊 ${texts.size} frases listas con voz neuronal (${Math.round((Date.now() - t0) / 1000)}s)`));
 }
-getTTS().then(() => { console.log('🔊 Modelo de voz cargado'); warmup(); }).catch((e) => console.warn('⚠️ Voz neuronal no disponible:', e.message));
+if (TTS_ON) getTTS().then(() => { console.log('🔊 Modelo de voz cargado'); warmup(); }).catch((e) => console.warn('⚠️ Voz neuronal no disponible:', e.message));
+else console.log('🔇 Voz neuronal desactivada (TTS=off): se usará la voz del navegador');
 
 const server = http.createServer(async (req, res) => {
+  if (req.url.startsWith('/api/tts/status')) {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ enabled: TTS_ON }));
+  }
   if (req.url.startsWith('/api/tts')) {
+    if (!TTS_ON) { res.writeHead(503); return res.end('TTS desactivado'); }
     const u = new URL(req.url, 'http://x');
     const text = cleanSpeech(u.searchParams.get('t') || '');
     const voice = VOICES.includes(u.searchParams.get('v')) ? u.searchParams.get('v') : VOICES[0];

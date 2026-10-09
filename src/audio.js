@@ -9,10 +9,15 @@ let voiceId = (() => { try { return localStorage.getItem('ep-voice') || 'bf_emma
 export const getVoice = () => voiceId;
 export function setVoice(id) { voiceId = id; try { localStorage.setItem('ep-voice', id); } catch { /* sin storage */ } }
 
+// ¿El servidor tiene voz neuronal? (si no, se usa directamente la del navegador)
+export const neuralVoice = fetch('/api/tts/status').then((r) => r.json()).then((j) => !!j.enabled).catch(() => false);
+let neuralOn = true;
+neuralVoice.then((v) => { neuralOn = v; });
+
 const cache = new Map();
 function fetchAudio(text) {
   const t = cleanSpeech(text);
-  if (!t) return Promise.resolve(null);
+  if (!t || !neuralOn) return Promise.resolve(null);
   const key = voiceId + '|' + t;
   if (!cache.has(key)) {
     const p = fetch(`/api/tts?v=${voiceId}&t=${encodeURIComponent(t)}`)
