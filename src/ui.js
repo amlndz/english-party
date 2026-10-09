@@ -2,7 +2,7 @@
 import { ZONES, ZONE_BY_ID } from './content.js';
 import { store, storage } from './store.js';
 import { net } from './net.js';
-import { speak, sfx, prefetch, stopSpeaking, VOICES, getVoice, setVoice, neuralVoice } from './audio.js';
+import { speak, sfx, prefetch, stopSpeaking, VOICES, getVoice, setVoice, neuralVoice, VOICE } from './audio.js';
 import { renderQuestion, pickQuestions } from './quiz.js';
 import { mysteryBoxes, cupGame } from './minigames.js';
 import { progress, ROADMAP, PASS, EXAM_Q } from './progress.js';
@@ -165,7 +165,7 @@ export function initUI({ onPreview, onStart, onEmote, onGo }) {
     listen('presence', () => renderPresence(z));
     body.innerHTML = `
       <p class="m-topic">${esc(z.topic)}</p>
-      <div class="voice-row"><span>🔊 Voz para la pronunciación:</span>${VOICES.map((v) => `<button type="button" class="vchip ${v.id === getVoice() ? 'on' : ''}" data-v="${v.id}">${v.n}</button>`).join('')}</div>
+      <div class="voice-row" ${VOICE ? '' : 'hidden'}><span>🔊 Voz para la pronunciación:</span>${VOICES.map((v) => `<button type="button" class="vchip ${v.id === getVoice() ? 'on' : ''}" data-v="${v.id}">${v.n}</button>`).join('')}</div>
       <div class="menu-cards four">
         <button class="mc mc-learn" type="button"><span class="mc-n">1</span>${badge(pr.theory ? '✓ Vista' : '')}<span class="mc-e">📖</span><b>Aprender teoría</b><small>Explicaciones cortas con ejemplos que puedes escuchar</small></button>
         <button class="mc mc-practice" type="button"><span class="mc-n">2</span>${badge(pr.practiceBest ? `Mejor ${Math.round(pr.practiceBest * 100)}%` : '')}<span class="mc-e">✏️</span><b>Practicar</b><small>8 preguntas sin prisa, con pistas y corrección</small></button>
@@ -197,7 +197,7 @@ export function initUI({ onPreview, onStart, onEmote, onGo }) {
           <div class="learn-n">${i + 1} / ${z.theory.length}</div>
           <h3>${esc(s.title)}</h3>
           <div class="learn-body">${s.body}</div>
-          <div class="learn-ex">${s.ex.map((e) => `<button type="button" class="ex" data-t="${esc(e)}"><span>🔊</span>${esc(e)}</button>`).join('')}</div>
+          <div class="learn-ex">${s.ex.map((e) => `${VOICE ? `<button type="button" class="ex" data-t="${esc(e)}"><span>🔊</span>${esc(e)}</button>` : `<div class="ex ex-static"><span>💬</span>${esc(e)}</div>`}`).join('')}</div>
         </div>
         <div class="learn-nav">
           <button class="btn btn-ghost" type="button" ${i === 0 ? 'disabled' : ''} data-go="-1">◀ Anterior</button>
@@ -288,7 +288,7 @@ export function initUI({ onPreview, onStart, onEmote, onGo }) {
             <li>✅ <b>+100</b> por acierto y hasta <b>+50</b> por rapidez</li>
             <li>🔥 Racha de aciertos: <b>+25</b> extra por cada una</li>
             <li>🎁 Tras la 3ª: <b>caja misteriosa</b> · 🥤 Tras la 6ª: <b>el trile</b></li>
-            <li>🔊 Después de cada respuesta puedes escuchar la frase</li>
+            ${VOICE ? '<li>🔊 Después de cada respuesta puedes escuchar la frase</li>' : ''}
           </ul>
           <button class="btn btn-primary btn-xl start" type="button">¡Empezar partida! ▶</button>
         </div>
@@ -478,7 +478,7 @@ export function initUI({ onPreview, onStart, onEmote, onGo }) {
           <div class="rv ${r.ok ? 'ok' : 'ko'}">
             <span class="rv-i">${r.ok ? '✅' : '❌'}</span>
             <span class="rv-t"><b>${esc(fullSentence(r.q))}</b>${r.ok ? '' : `<small>Tu respuesta: ${esc(r.given || '—')}${r.q.tip ? ` · 💡 ${esc(r.q.tip)}` : ''}</small>`}</span>
-            <button class="rv-play" type="button" data-i="${i}">🔊</button>
+            ${VOICE ? `<button class="rv-play" type="button" data-i="${i}">🔊</button>` : ''}
           </div>`).join('')}</div>
       </div>`;
     body.querySelectorAll('.rv-play').forEach((b) => { const t = fullSentence(res[b.dataset.i].q); prefetch(t); b.onclick = () => speak(t); });

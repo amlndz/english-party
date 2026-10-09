@@ -1,6 +1,10 @@
 // Pronunciación: voz neuronal (Kokoro, generada y cacheada en el servidor) con la voz del navegador de reserva
 import { cleanSpeech } from './sentences.js';
 
+// Interruptor general de la pronunciación. Desactivada por ahora: no suena nada
+// y la interfaz oculta los botones 🔊 y el selector de voz. Para reactivarla: true.
+export const VOICE = false;
+
 export const VOICES = [
   { id: 'bf_emma', n: 'Emma 🇬🇧' }, { id: 'bm_george', n: 'George 🇬🇧' },
   { id: 'af_heart', n: 'Heart 🇺🇸' }, { id: 'am_michael', n: 'Michael 🇺🇸' },
@@ -10,7 +14,7 @@ export const getVoice = () => voiceId;
 export function setVoice(id) { voiceId = id; try { localStorage.setItem('ep-voice', id); } catch { /* sin storage */ } }
 
 // ¿El servidor tiene voz neuronal? (si no, se usa directamente la del navegador)
-export const neuralVoice = fetch('/api/tts/status').then((r) => r.json()).then((j) => !!j.enabled).catch(() => false);
+export const neuralVoice = !VOICE ? Promise.resolve(false) : fetch('/api/tts/status').then((r) => r.json()).then((j) => !!j.enabled).catch(() => false);
 let neuralOn = true;
 neuralVoice.then((v) => { neuralOn = v; });
 
@@ -29,7 +33,7 @@ function fetchAudio(text) {
   }
   return cache.get(key);
 }
-export const prefetch = (text) => { fetchAudio(text); };
+export const prefetch = (text) => { if (VOICE) fetchAudio(text); };
 
 let browserVoice = null;
 function pickVoice() {
@@ -49,6 +53,7 @@ function browserSpeak(text, rate) {
 
 let current = null; let token = 0;
 export async function speak(text, rate = 0.92) {
+  if (!VOICE) return;
   const my = ++token;
   current?.pause();
   if ('speechSynthesis' in window) speechSynthesis.cancel();

@@ -472,3 +472,6 @@ kbd { font-family: var(--body); font-weight: 900; font-size: 0.8em; background: 
   .menu-cards.four { grid-template-columns: 1fr; }
   .rm-node { width: 100%; } .rm-node.right { margin-left: 0; } .rm-path::before { display: none; }
 }
+
+div.fb-listen { cursor: default; }
+.ex-static:hover { transform: none; }

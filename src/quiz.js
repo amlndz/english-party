@@ -1,5 +1,5 @@
 // Motor de preguntas: choose / type / drag / order
-import { speak, sfx, prefetch } from './audio.js';
+import { speak, sfx, prefetch, VOICE } from './audio.js';
 import { answers, fullSentence } from './sentences.js';
 import { generate } from './generators.js';
 
@@ -73,10 +73,12 @@ export function renderQuestion(el, q, { onAnswer, autoSpeak = true, silent = fal
     feedback.innerHTML = `
       <div class="fb-title">${ok ? '✅ ¡Correcto!' : timeout ? '⏰ ¡Se acabó el tiempo!' : '❌ ¡Casi!'}</div>
       ${q.tip ? `<div class="fb-tip">💡 ${esc(q.tip)}</div>` : ''}
-      <button class="fb-listen" type="button"><span>🔊</span> <span class="fb-sent">${esc(full)}</span></button>
-      <div class="fb-hint">Pulsa para escuchar la pronunciación</div>`;
-    feedback.querySelector('.fb-listen').onclick = () => speak(full);
-    if (autoSpeak) setTimeout(() => speak(full), 250);
+      ${VOICE ? `<button class="fb-listen" type="button"><span>🔊</span> <span class="fb-sent">${esc(full)}</span></button>
+      <div class="fb-hint">Pulsa para escuchar la pronunciación</div>` : `<div class="fb-listen"><span class="fb-sent">${esc(full)}</span></div>`}`;
+    if (VOICE) {
+      feedback.querySelector('.fb-listen').onclick = () => speak(full);
+      if (autoSpeak) setTimeout(() => speak(full), 250);
+    }
     onAnswer?.(ok);
   };
 

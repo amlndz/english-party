@@ -8,7 +8,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "dev": "concurrently -k -n server,web -c magenta,cyan \"PORT=3001 node --watch server.js\" \"vite --host --port 5173 --strictPort\"",
+    "dev": "concurrently -k -n server,web -c magenta,cyan \"TTS=off PORT=3001 node --watch server.js\" \"vite --host --port 5173 --strictPort\"",
     "build": "vite build",
     "start": "node server.js",
     "build:static": "vite build --mode static --base ./ --outDir dist-static"

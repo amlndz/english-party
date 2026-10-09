@@ -9,11 +9,10 @@ Crea tu *bean*, pasea por las calles, entra en aulas temáticas y aprende, pract
 ![Node](https://img.shields.io/badge/Node-%E2%89%A520-339933?logo=nodedotjs&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![WebSockets](https://img.shields.io/badge/multijugador-WebSockets-ff3fa4)
-![Voz neuronal](https://img.shields.io/badge/voz-Kokoro%20TTS-ffd23f)
 
 ### ▶️ [Jugar a la demo online](https://amlndz-english-party.static.hf.space)
 
-<sub>Demo estática en Hugging Face: los otros jugadores son bots simulados en tu navegador. Para multijugador real y voz neuronal, arráncalo con el servidor (ver abajo).</sub>
+<sub>Demo estática en Hugging Face: los otros jugadores son bots simulados en tu navegador. Para multijugador real, arráncalo con el servidor (ver abajo).</sub>
 
 <img src="docs/screenshots/city.jpg" alt="Vista aérea de la ciudad-colegio" width="900">
 
@@ -27,9 +26,9 @@ Crea tu *bean*, pasea por las calles, entra en aulas temáticas y aprende, pract
 |---|---|
 | <img src="docs/screenshots/creator.jpg" width="420"> | **Crea tu bean** estilo Fall Guys: nombre y color. Los accesorios y skins se desbloquean con las ⭐ que ganas aprendiendo. |
 | <img src="docs/screenshots/classroom.jpg" width="420"> | **10 aulas temáticas** repartidas por la ciudad, cada una con su gramática: castillo medieval (*past simple*), laboratorio de robots (*future*), isla del tesoro (*possessives*), circo (*present continuous*), casa encantada (*prepositions*)… Ves a los demás jugadores en directo. |
-| <img src="docs/screenshots/menu.jpg" width="420"> | En cada aula eliges: **📖 Aprender teoría**, **✏️ Practicar**, **📝 Examen** o **🏆 Competir**. Hay 4 voces neuronales para la pronunciación. |
+| <img src="docs/screenshots/menu.jpg" width="420"> | En cada aula eliges: **📖 Aprender teoría**, **✏️ Practicar**, **📝 Examen** o **🏆 Competir**. Cada aula guarda tu progreso y tus estrellas. |
 | <img src="docs/screenshots/order.jpg" width="420"> | **4 tipos de ejercicio**: elegir la palabra del hueco, escribir la forma correcta, arrastrar palabras a los huecos y ordenar la frase. Generadores combinatorios: **cientos de frases distintas por aula**, sin repetir las que viste hace poco. |
-| <img src="docs/screenshots/feedback.jpg" width="420"> | Corrección al instante con una pista y la frase completa para **escuchar la pronunciación** con voz neuronal (Kokoro TTS). |
+| <img src="docs/screenshots/feedback.jpg" width="420"> | Corrección al instante con una pista y la frase completa. |
 | <img src="docs/screenshots/compete.jpg" width="420"> | **Competición en directo** contra la gente del aula: 9 preguntas con tiempo, rachas 🔥, marcador en vivo y ranking por aula. |
 | <img src="docs/screenshots/boxes.jpg" width="420"> | Cada 3 preguntas, un minijuego: **5 cajas misteriosas** que dan o quitan puntos… |
 | <img src="docs/screenshots/cups.jpg" width="420"> | …o **el trile**: sigue la bola dorada ⭐ entre los vasos y evita la bomba 💣. |
@@ -61,7 +60,7 @@ npm run dev
 
 Abre **http://localhost:5173**. Para jugar con otras personas de tu misma red, que abran `http://<IP-de-tu-ordenador>:5173`; en la terminal verás la dirección *Network*.
 
-> 🔊 La primera vez, el servidor descarga el modelo de voz Kokoro (~90 MB) desde Hugging Face y pre-genera los audios de todas las frases del contenido en `.tts-cache/`. Mientras tanto se usa la voz del navegador.
+> 🔇 **La pronunciación está desactivada por ahora.** El servidor incluye una voz neuronal (Kokoro TTS) lista para reactivarla: pon `VOICE = true` en `src/audio.js` y quita `TTS=off` del script `dev` en `package.json`. La primera vez descargará el modelo (~90 MB) y guardará los audios en `.tts-cache/`.
 
 ### Controles
 
@@ -78,7 +77,7 @@ Abre **http://localhost:5173**. Para jugar con otras personas de tu misma red, q
 
 ## 🌍 Desplegarlo
 
-El juego es **un único proceso Node** que sirve la web compilada, el WebSocket del multijugador (`/ws`) y la voz (`/api/tts`). Necesitas un hosting que mantenga un proceso Node encendido y admita WebSockets. Plataformas solo estáticas (Vercel o Netlify en modo estático, GitHub Pages) **no sirven**.
+La **versión completa** es un único proceso Node que sirve la web compilada, el WebSocket del multijugador (`/ws`) y la voz (`/api/tts`): necesita un hosting que mantenga un proceso Node encendido y admita WebSockets. Si te basta con la demo sin multijugador real, usa la versión estática, que funciona en cualquier hosting de ficheros.
 
 ### Opción gratis sin servidor · versión estática (Hugging Face Spaces, GitHub Pages, Netlify…)
 
@@ -86,13 +85,13 @@ El juego es **un único proceso Node** que sirve la web compilada, el WebSocket 
 npm run build:static     # genera dist-static/
 ```
 
-Sube el contenido de `dist-static/` a cualquier hosting estático. En este modo la lógica del juego (bots, competición y ranking) se ejecuta en el navegador: **no hay multijugador real entre personas** y se usa la voz del navegador. Así está publicada la [demo de Hugging Face](https://huggingface.co/spaces/amlndz/english-party).
+Sube el contenido de `dist-static/` a cualquier hosting estático. En este modo la lógica del juego (bots, competición y ranking) se ejecuta en el navegador: **no hay multijugador real entre personas**. Así está publicada la [demo de Hugging Face](https://huggingface.co/spaces/amlndz/english-party).
 
 ### Opción rápida · Render gratis con un clic
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/amlndz/english-party)
 
-Usa el [`render.yaml`](render.yaml) del repo: plan gratuito y **voz neuronal desactivada** (`TTS=off`), porque los 512 MB no dan para el modelo; se usa la voz del navegador. El servicio gratuito se duerme tras 15 min sin visitas y tarda ~1 min en despertar.
+Usa el [`render.yaml`](render.yaml) del repo: plan gratuito y **voz neuronal desactivada** (`TTS=off`), porque los 512 MB no dan para el modelo. El servicio gratuito se duerme tras 15 min sin visitas y tarda ~1 min en despertar.
 
 ### Opción 1 · Cualquier servidor con Node (VPS, Render, Railway…)
 
