@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>English Party</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Titan+One&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="loading"><div class="logo">ENGLISH<br /><span>PARTY</span></div><div class="spinner"></div></div>
+
+      <section id="creator" hidden>
+        <div class="cr-brand">
+          <div class="logo">ENGLISH<br /><span>PARTY</span></div>
+          <p>Camina por la isla, entra en las aulas y compite en directo.</p>
+        </div>
+        <div class="cr-panel">
+          <h2>Crea tu bean</h2>
+          <label class="lbl" for="cr-name">Nombre</label>
+          <div class="name-row">
+            <input id="cr-name" maxlength="14" placeholder="Tu nombre" autocomplete="off" />
+            <button id="cr-rand" class="icon-btn" type="button" title="Nombre aleatorio">🎲</button>
+          </div>
+          <span class="lbl">Color</span>
+          <div id="cr-colors" class="swatches"></div>
+          <p class="cr-note">🔒 Los accesorios y skins (pirata, ninja, samurái, dragón…) se desbloquean en la <b>tienda</b> con las ⭐ que ganes aprendiendo.</p>
+          <button id="cr-go" class="btn btn-primary btn-xl" type="button">¡A jugar! ▶</button>
+        </div>
+      </section>
+
+      <section id="hud" hidden>
+        <div class="hud-tl">
+          <div class="me-card"><span class="me-dot"></span><b id="me-name"></b><span id="me-pts" class="pts">⭐ 0</span></div>
+          <div class="hud-btns">
+            <button id="btn-shop" class="hud-btn" type="button"><span>🛍️</span>Tienda</button>
+            <button id="btn-map" class="hud-btn" type="button"><span>🗺️</span>Mapa <kbd>M</kbd></button>
+            <button id="btn-cam" class="hud-btn hud-btn-icon" type="button" title="Centrar cámara (C)"><span>🎯</span></button>
+          </div>
+        </div>
+        <div class="hud-tr">
+          <div class="online"><span class="live-dot"></span><span id="online-count">conectando…</span></div>
+          <canvas id="minimap" width="360" height="290" title="Abrir mapa (M)"></canvas>
+        </div>
+        <div class="hud-bl">
+          <div class="emotes"><button type="button">👋</button><button type="button">🎉</button><button type="button">😂</button><button type="button">❤️</button><button type="button">🔥</button><button type="button">🤔</button></div>
+        </div>
+        <div class="hud-hint"><kbd>WASD</kbd> o clic para moverte · arrastra para girar · <kbd>C</kbd> centrar cámara · <kbd>Espacio</kbd> saltar</div>
+        <div id="zone-card" hidden></div>
+      </section>
+
+      <section id="modal" hidden>
+        <div class="modal-box">
+          <header class="m-head">
+            <button class="m-back" type="button" hidden>◀ Menú</button>
+            <div class="m-emoji"></div>
+            <div class="m-titles"><div class="m-kicker"></div><h2 class="m-title"></h2></div>
+            <div class="m-presence"></div>
+            <button class="m-close" type="button" aria-label="Cerrar">✕</button>
+          </header>
+          <div class="m-body"></div>
+        </div>
+      </section>
+
+      <section id="shop" class="overlay" hidden>
+        <div class="shop-box">
+          <header class="shop-head">
+            <div class="shop-title">🛍️ Tienda</div>
+            <div class="shop-pts">⭐ 0</div>
+            <button class="m-close shop-close" type="button" aria-label="Cerrar">✕</button>
+          </header>
+          <div class="shop-main">
+            <div class="shop-preview">
+              <canvas></canvas>
+              <span class="lbl">Color (gratis)</span>
+              <div class="shop-colors swatches"></div>
+            </div>
+            <div class="shop-right">
+              <div class="shop-tabs"><button type="button" data-tab="skin" class="on">🦸 Skins</button><button type="button" data-tab="acc">🎩 Accesorios</button></div>
+              <div class="shop-grid"></div>
+              <div class="shop-msg"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="bigmap" class="overlay" hidden>
+        <div class="map-box">
+          <header class="shop-head map-head">
+            <div class="shop-title">🗺️ Mapa de la isla</div>
+            <button class="m-close map-close" type="button" aria-label="Cerrar">✕</button>
+          </header>
+          <div class="map-main">
+            <canvas width="1000" height="790"></canvas>
+            <div class="map-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <div id="toast"></div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.tts-cache/
+.claude/
+.DS_Store
