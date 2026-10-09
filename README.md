@@ -87,11 +87,11 @@ PORT=3000 npm start
 - **Render / Railway**: crea un *Web Service* desde el repo, con *build command* `npm install && npm run build` y *start command* `npm start`. La plataforma pone `PORT` automáticamente.
 - Detrás de un proxy (nginx, Caddy…) acuérdate de dejar pasar las cabeceras de **WebSocket** en `/ws`.
 
-### Opción 2 · Docker (Fly.io, VPS, Cloud Run con min-instances ≥ 1…)
+### Opción 2 · Docker (Hugging Face Spaces, Fly.io, VPS…)
 
 ```bash
 docker build -t english-party .
-docker run -p 3000:3000 -v english-party-tts:/app/.tts-cache english-party
+docker run -p 3000:7860 -v english-party-tts:/app/.tts-cache english-party   # abre http://localhost:3000
 ```
 
 El volumen guarda los audios ya generados para no regenerarlos en cada despliegue.

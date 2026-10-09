@@ -1,12 +1,12 @@
 # English Party — imagen de producción (web + multijugador + voz en un solo proceso)
+# Compatible con Hugging Face Spaces (usuario sin privilegios, uid 1000)
 FROM node:22-slim
 WORKDIR /app
-COPY package*.json ./
+COPY --chown=node:node package*.json ./
 RUN npm ci
-COPY . .
-RUN npm run build
-ENV PORT=3000
-EXPOSE 3000
-# .tts-cache guarda los audios generados; móntalo como volumen para no regenerarlos
-VOLUME ["/app/.tts-cache"]
+COPY --chown=node:node . .
+RUN npm run build && mkdir -p .tts-cache && chown -R node:node /app
+USER node
+ENV PORT=7860 NODE_ENV=production
+EXPOSE 7860
 CMD ["node", "server.js"]
