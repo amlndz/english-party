@@ -76,7 +76,7 @@ export function initUI({ onPreview, onStart, onEmote, onGo }) {
   const inZone = (id) => [...store.players.values()].filter((p) => p.zone === id);
   const refreshOnline = () => {
     const n = store.players.size + 1;
-    $('#online-count').textContent = store.online ? `${n} online` : 'sin conexión';
+    $('#online-count').textContent = !store.online ? 'sin conexión' : store.offlineDemo ? `${n} en la isla · demo` : `${n} online`;
   };
 
   // ---------------- tarjeta de aula ----------------

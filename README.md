@@ -11,6 +11,10 @@ Crea tu *bean*, pasea por las calles, entra en aulas temáticas y aprende, pract
 ![WebSockets](https://img.shields.io/badge/multijugador-WebSockets-ff3fa4)
 ![Voz neuronal](https://img.shields.io/badge/voz-Kokoro%20TTS-ffd23f)
 
+### ▶️ [Jugar a la demo online](https://amlndz-english-party.static.hf.space)
+
+<sub>Demo estática en Hugging Face: los otros jugadores son bots simulados en tu navegador. Para multijugador real y voz neuronal, arráncalo con el servidor (ver abajo).</sub>
+
 <img src="docs/screenshots/city.jpg" alt="Vista aérea de la ciudad-colegio" width="900">
 
 </div>
@@ -76,6 +80,14 @@ Abre **http://localhost:5173**. Para jugar con otras personas de tu misma red, q
 
 El juego es **un único proceso Node** que sirve la web compilada, el WebSocket del multijugador (`/ws`) y la voz (`/api/tts`). Necesitas un hosting que mantenga un proceso Node encendido y admita WebSockets. Plataformas solo estáticas (Vercel o Netlify en modo estático, GitHub Pages) **no sirven**.
 
+### Opción gratis sin servidor · versión estática (Hugging Face Spaces, GitHub Pages, Netlify…)
+
+```bash
+npm run build:static     # genera dist-static/
+```
+
+Sube el contenido de `dist-static/` a cualquier hosting estático. En este modo la lógica del juego (bots, competición y ranking) se ejecuta en el navegador: **no hay multijugador real entre personas** y se usa la voz del navegador. Así está publicada la [demo de Hugging Face](https://huggingface.co/spaces/amlndz/english-party).
+
 ### Opción rápida · Render gratis con un clic
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/amlndz/english-party)
@@ -119,7 +131,9 @@ El volumen guarda los audios ya generados para no regenerarlos en cada despliegu
 | Frontend | Vite + JavaScript sin framework |
 
 ```
-server.js            Servidor: estáticos, WebSocket, bots y /api/tts
+server.js            Servidor: estáticos, WebSocket y /api/tts
+src/game.js          Lógica de juego compartida: jugadores, bots, competición y ranking
+src/net.js           Conexión: WebSocket o modo local (versión estática)
 src/content.js       Las 10 aulas: teoría y banco de preguntas
 src/generators.js    Generadores de preguntas por tema (variedad infinita)
 src/city.js          Plano de la ciudad y rutas por calles (cliente y bots)
